@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 引入 application.properties -->
+    <properties resource="application.properties" />
+    
+    <!-- 
+    	defaultModelType:指定生成对象的样式
+        1，conditional：类似hierarchical；
+        2，flat：所有内容（主键，blob）等全部生成在一个对象中；
+        3，hierarchical：主键生成一个XXKey对象(key class)，Blob等单独生成一个对象，其他简单属性在一个对象中(record class)
+    	targetRuntime:
+        1，MyBatis3：默认的值，生成基于MyBatis3.x以上版本的内容，包括XXXBySample；
+        2，MyBatis3Simple：类似MyBatis3，只是不生成XXXBySample；
+     -->
+    
+    <context id="oracle" targetRuntime="MyBatis3Simple" defaultModelType="hierarchical">
+    
+    	<!-- beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号； -->
+       <!--  <property name="beginningDelimiter" value="‘" />
+        <property name="endingDelimiter" value="’" /> -->
+        <!-- 生成的Java文件的编码 -->
+   		<property name="javaFileEncoding" value="UTF-8"/>
+   		<!-- 格式化XML代码 -->
+    	<property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+    
+    	
+		
+    
+        <!-- 指定生成 Mapper 的继承模板 -->
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="${generator.mappers}" />
+        </plugin>
+        
+        <!-- 生成 JavaBean 对象重写 toString方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+
+        <!-- 生成 JavaBean 对象继承 Serializable 类 -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        
+        <!-- 生成 JavaBean 对象重写 equals 和 hashCode 方法 -->
+        <!-- <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" /> -->
+        
+        <!-- jdbc 连接配置 -->
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+            connectionURL="${spring.datasource.url}"
+            userId="${spring.datasource.username}"
+            password="${spring.datasource.password}">
+        </jdbcConnection>
+
+		<!-- java类型处理器 
+	        用于处理DB中的类型到Java中的类型，默认使用JavaTypeResolverDefaultImpl；
+	        注意一点，默认会先尝试使用Integer，Long，Short等来对应DECIMAL和 NUMERIC数据类型； 
+	    -->
+	    <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
+	        <!-- 
+	            true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
+	            false：默认,
+	                scale>0;length>18：使用BigDecimal;
+	                scale=0;length[10,18]：使用Long；
+	                scale=0;length[5,9]：使用Integer；
+	                scale=0;length<5：使用Short；
+	         -->
+	        <property name="forceBigDecimals" value="false"/>
+	    </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="${generator.javaModel-targetPackage}"
+            targetProject="${generator.targetProject}" />
+
+        <sqlMapGenerator targetPackage="${generator.sqlMap-targetPackage}" 
+            targetProject="${generator.targetProject}" />
+
+        <javaClientGenerator targetPackage="${generator.javaClient-targetPackage}"
+            targetProject="${generator.targetProject}" type="XMLMAPPER" />
+        
+        <!-- Mysql 配置 -->
+        <!-- <generatedKey column="id" sqlStatement="Mysql" identity="true" /> -->
+        <!-- Oracle 配置 -->
+        <!-- <generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/> -->
+        
+        <!-- tableName：数据库表名，domainObjectName：生成文件名 ，schema：数据源-->
+        <table schema="${schema}" tableName="T_MER" domainObjectName="MerEntity">
+        </table>
+    </context>
+</generatorConfiguration>
