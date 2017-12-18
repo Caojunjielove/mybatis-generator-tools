@@ -81,7 +81,12 @@
         <!-- <generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/> -->
         
         <!-- tableName：数据库表名，domainObjectName：生成文件名 ，schema：数据源-->
-        <table schema="${schema}" tableName="T_MER" domainObjectName="MerEntity">
+        <table schema="${schema}" tableName="T_MER" domainObjectName="MerEntity" 
+		enableCountByExample="false" 
+        	enableUpdateByExample="false" 
+        	enableDeleteByExample="false" 
+        	enableSelectByExample="false" 
+        	selectByExampleQueryId="false">
         </table>
     </context>
 </generatorConfiguration>
